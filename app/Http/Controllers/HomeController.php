@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Book;
+use App\Models\Service;
+use App\Models\Venue;
 
 class HomeController extends Controller
 {

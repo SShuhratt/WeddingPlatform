@@ -39,6 +39,7 @@ class VenueController extends Controller
             'location_url'       => 'required|unique:venues,location',
             'price'         => 'required|numeric',
             'image_url'     => 'required|url',
+            'capacity'      => 'required|numeric',
             'url'           => 'required|url',
         ]);
 
@@ -75,6 +76,7 @@ class VenueController extends Controller
             'location_url'       => 'required',
             'price'         => 'required|numeric',
             'image_url'     => 'required|url',
+            'capacity'      => 'required|numeric',
             'url'           => 'required|url',
         ]);
 
