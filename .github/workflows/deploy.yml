@@ -1,4 +1,4 @@
-name: Deploy to Production
+name: 🚀 Deploy to Production (Deploy Only)
 
 on:
   push:
@@ -7,20 +7,20 @@ on:
 
 jobs:
   deploy:
+    name: 🔄 Deploy Laravel App via SSH
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: ⏬ Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Setup SSH
+      - name: 🔐 Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SERVER_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-
-      - name: Deploy to server
+      - name: 🚀 Deploy via SSH
         run: |
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd ${{ secrets.DEPLOY_PATH }}
