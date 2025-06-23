@@ -16,20 +16,19 @@ jobs:
 
       - name: 🔐 Setup SSH Key
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          mkdir -p $HOME/.ssh
+          echo "${{ secrets.SERVER_KEY }}" > $HOME/.ssh/id_rsa
+          chmod 600 $HOME/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> $HOME/.ssh/known_hosts
+
       - name: 🚀 Deploy via SSH
         run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh -i $HOME/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd ${{ secrets.DEPLOY_PATH }}
             git pull origin main
-            composer install --no-interaction --prefer-dist --optimize-autoloader
-            php artisan migrate --force
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
-            chown -R www-data:www-data .
-            chmod -R 755 .
+            docker compose -f docker-compose.prod.yml up -d --build
+            docker compose exec app php artisan config:cache
+            docker compose exec app php artisan route:cache
+            docker compose exec app php artisan view:cache
+            docker compose exec app php artisan migrate --force
           EOF
